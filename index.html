@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光影志 · Glamour Gallery — 写真集</title>
+<meta name="description" content="光影志 —— 一场关于光与注视的写真展览。十二帧风格肖像，六组主题系列。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b0b0d'/%3E%3Ctext x='32' y='43' font-size='30' text-anchor='middle' fill='%23c9a15f' font-family='serif'%3E光%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0b0b0d; --bg2:#101014; --surface:#15151a; --surface2:#1c1c22;
+  --nav-bg:rgba(11,11,13,.78);
+  --line:rgba(240,236,229,.12); --line-strong:rgba(240,236,229,.24);
+  --text:#ece8e1; --text-strong:#f7f4ee; --muted:#a49e95; --faint:#6f6a62;
+  --gold:#c9a15f; --gold-soft:rgba(201,161,95,.14);
+  --serif:'Noto Serif SC','Songti SC','STSong','SimSun',serif;
+  --sans:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  --latin:'Cormorant Garamond','Times New Roman',serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --nav-h:74px;
+}
+
+html[data-theme="light"]{
+  --bg:#f3f0ea; --bg2:#ece7df; --surface:#ffffff; --surface2:#f8f5ef;
+  --nav-bg:rgba(243,240,234,.84);
+  --line:rgba(28,25,21,.12); --line-strong:rgba(28,25,21,.22);
+  --text:#232019; --text-strong:#0f0e0b; --muted:#6e695f; --faint:#a39d90;
+  --gold:#a17c39; --gold-soft:rgba(161,124,57,.12);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); font-size:16px; line-height:1.75; font-weight:400;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:''; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+::selection{background:var(--gold);color:#0b0b0d}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+p{text-wrap:pretty}
+h1,h2,h3{text-wrap:balance}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface2);border:2px solid var(--bg);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+/* ---------- progress + nav ---------- */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:90;background:transparent}
+.progress i{display:block;height:100%;background:var(--gold);transform:scaleX(0);transform-origin:0 50%;transition:transform .15s linear}
+
+.nav{
+  position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:80;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:0 clamp(18px,4vw,56px);
+  border-bottom:1px solid transparent;
+  transition:background .45s var(--ease),border-color .45s var(--ease),backdrop-filter .45s;
+}
+.nav.scrolled{background:var(--nav-bg);border-bottom-color:var(--line);backdrop-filter:blur(16px) saturate(1.2)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--gold);
+  color:var(--gold);font-family:var(--serif);font-size:17px;letter-spacing:0;flex:0 0 auto;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.25}
+.brand-name{font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.24em}
+.brand-en{font-family:var(--latin);font-size:10px;letter-spacing:.3em;color:var(--muted)}
+.nav-links{display:flex;gap:clamp(16px,3vw,40px)}
+.nav-links a{font-size:13px;letter-spacing:.2em;color:var(--muted);position:relative;padding:6px 0;transition:color .3s}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:0 50%;transition:transform .4s var(--ease)}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-vol{font-family:var(--latin);font-size:11px;letter-spacing:.28em;color:var(--faint);white-space:nowrap}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:calc(var(--nav-h) + 30px) clamp(20px,5vw,72px) 34px;overflow:hidden;
+  background:linear-gradient(165deg,#17171d 0%,#0b0b0d 60%);
+}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 28%;filter:brightness(.56) saturate(.92);animation:kenburns 28s var(--ease) infinite alternate}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,10,.5) 0%,rgba(8,8,10,.18) 38%,rgba(8,8,10,.9) 100%)}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.1)}}
+
+.hero-inner{position:relative;z-index:2;max-width:1180px;color:#ece8e1}
+.eyebrow{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--latin);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
+}
+.eyebrow::before{content:'';width:38px;height:1px;background:var(--gold);opacity:.8}
+.hero h1{
+  font-family:var(--serif);font-weight:900;font-size:clamp(58px,11.5vw,158px);
+  line-height:1.02;letter-spacing:.05em;margin:22px 0 6px;color:#f7f4ee;
+}
+.hero h1 .hollow{
+  color:transparent;-webkit-text-stroke:1px rgba(236,232,225,.65);
+}
+.hero-sub{
+  max-width:36em;color:rgba(236,232,225,.72);font-size:clamp(14px,1.4vw,16px);
+  font-weight:300;letter-spacing:.06em;margin-top:8px;
+}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 30px;border:1px solid var(--gold);color:var(--gold);
+  font-family:var(--serif);font-size:14px;letter-spacing:.24em;
+  transition:background .35s var(--ease),color .35s var(--ease),border-color .35s;
+}
+.btn:hover{background:var(--gold);color:#14100a}
+.btn.ghost{border-color:rgba(236,232,225,.32);color:#ece8e1}
+.btn.ghost:hover{background:rgba(236,232,225,.1);border-color:#ece8e1;color:#fff}
+
+.hero-foot{
+  position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;
+  gap:20px;margin-top:clamp(40px,7vh,90px);padding-top:20px;border-top:1px solid rgba(236,232,225,.16);
+  color:rgba(236,232,225,.55);font-size:11px;letter-spacing:.22em;
+}
+.scroll-hint{display:inline-flex;align-items:center;gap:12px}
+.scroll-hint i{display:block;width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);animation:drip 2.4s var(--ease) infinite}
+@keyframes drip{0%{transform:scaleY(.2);transform-origin:top;opacity:0}45%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------- marquee ---------- */
+.marquee{position:relative;z-index:2;border-block:1px solid var(--line);background:var(--bg2);overflow:hidden;padding:16px 0}
+.marquee-track{display:flex;width:max-content;animation:marquee 46s linear infinite}
+.mq-group{display:flex;flex:0 0 auto;align-items:center}
+.mq-group span{
+  font-family:var(--serif);font-size:14px;letter-spacing:.6em;color:var(--muted);
+  white-space:nowrap;padding-right:18px;
+}
+.mq-group b{color:var(--gold);font-weight:400;padding-right:18px}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+.section{position:relative;z-index:2;max-width:1440px;margin:0 auto;padding:clamp(76px,10vw,148px) clamp(20px,5vw,72px);scroll-margin-top:calc(var(--nav-h) + 8px)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 32px;margin-bottom:clamp(34px,5vw,62px)}
+.sec-head h2{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.4vw,54px);letter-spacing:.05em;line-height:1.18;margin-top:14px}
+.sec-note{max-width:30em;color:var(--muted);font-size:14px;letter-spacing:.04em}
+.sec-index{font-family:var(--latin);font-size:12px;letter-spacing:.32em;color:var(--faint)}
+
+/* ---------- series ---------- */
+.series-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
+.series-card{
+  position:relative;aspect-ratio:4/5;overflow:hidden;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface);
+  transition:border-color .4s var(--ease),transform .5s var(--ease);
+}
+.series-card:hover{border-color:rgba(201,161,95,.55);transform:translateY(-4px)}
+.series-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.68);transition:transform 1.2s var(--ease),filter .6s}
+.series-card:hover img{transform:scale(1.07);filter:brightness(.52)}
+.sc-body{
+  position:absolute;inset:auto 0 0 0;padding:clamp(18px,2.4vw,28px);
+  display:flex;flex-direction:column;gap:6px;z-index:2;
+  background:linear-gradient(180deg,transparent,rgba(6,6,8,.86) 58%);
+}
+.sc-en{font-family:var(--latin);font-size:11px;letter-spacing:.3em;color:var(--gold)}
+.sc-name{font-family:var(--serif);font-size:clamp(21px,2vw,27px);font-weight:700;letter-spacing:.08em;color:#f5f2ec}
+.sc-desc{font-size:12.5px;color:rgba(236,232,225,.66);letter-spacing:.03em;line-height:1.7}
+.sc-count{
+  position:absolute;top:16px;right:16px;z-index:2;
+  font-family:var(--latin);font-size:12px;letter-spacing:.2em;color:var(--gold);
+  border:1px solid rgba(201,161,95,.5);padding:3px 10px;background:rgba(10,10,12,.42);backdrop-filter:blur(4px);
+}
+
+/* ---------- filters ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:clamp(26px,3.4vw,40px)}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--line-strong);border-radius:999px;padding:9px 20px;
+  font-size:13px;letter-spacing:.14em;color:var(--muted);
+  transition:color .3s,border-color .3s,background .3s;
+}
+.chip small{font-family:var(--latin);font-size:11px;letter-spacing:.08em;opacity:.65}
+.chip:hover{color:var(--text);border-color:var(--gold)}
+.chip.active{background:var(--gold);border-color:var(--gold);color:#14100a}
+.chip.active small{opacity:.75}
+
+/* ---------- masonry gallery ---------- */
+.masonry{columns:3;column-gap:clamp(14px,2vw,26px)}
+.g-item{
+  position:relative;break-inside:avoid;margin-bottom:clamp(14px,2vw,26px);
+  aspect-ratio:3/4;overflow:hidden;cursor:zoom-in;
+  border:1px solid var(--line);background:var(--surface);
+  transition:border-color .4s;
+}
+.g-item:hover{border-color:rgba(201,161,95,.4)}
+.g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
+.g-item img.loaded{opacity:1}
+.g-item:hover img{transform:scale(1.05)}
+.g-item::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,transparent 48%,rgba(6,6,8,.82));opacity:0;transition:opacity .45s}
+.g-item:hover::after{opacity:1}
+.g-num{
+  position:absolute;top:14px;left:16px;z-index:2;
+  font-family:var(--latin);font-size:12px;letter-spacing:.22em;color:var(--gold);
+  text-shadow:0 1px 10px rgba(0,0,0,.65);
+}
+.g-cap{
+  position:absolute;left:18px;right:18px;bottom:16px;z-index:2;
+  display:flex;flex-direction:column;gap:3px;
+  opacity:0;transform:translateY(10px);transition:opacity .45s var(--ease),transform .45s var(--ease);
+}
+.g-item:hover .g-cap,.g-item:focus-visible .g-cap{opacity:1;transform:none}
+.g-title{font-family:var(--serif);font-size:18px;letter-spacing:.06em;color:#f5f2ec}
+.g-series{font-size:11.5px;letter-spacing:.18em;color:var(--gold)}
+.g-item.missing::before{
+  content:'图片缺失';position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--faint);font-size:12px;letter-spacing:.2em;background:var(--surface2);
+}
+
+/* ---------- empty state ---------- */
+.empty{
+  border:1px dashed var(--line-strong);padding:clamp(40px,7vw,72px) clamp(22px,4vw,48px);
+  text-align:center;color:var(--muted);background:var(--surface);
+}
+.empty h3{font-family:var(--serif);font-size:clamp(20px,2.4vw,26px);color:var(--text);letter-spacing:.1em;margin-bottom:12px}
+.empty p{font-size:14px;max-width:34em;margin:0 auto}
+.empty ol{display:inline-block;text-align:left;margin-top:20px;font-size:13.5px;line-height:2.2;color:var(--muted)}
+.empty li{padding-left:4px}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,84px);align-items:start}
+.about-quote{font-family:var(--serif);font-size:clamp(23px,2.9vw,36px);line-height:1.55;font-weight:600;letter-spacing:.03em;color:var(--text-strong)}
+.about-quote em{font-style:normal;color:var(--gold)}
+.about-body{color:var(--muted);font-size:14.5px;letter-spacing:.02em;line-height:2}
+.about-body p+p{margin-top:16px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:34px}
+.stat{background:var(--bg);padding:24px 22px}
+.stat b{display:block;font-family:var(--latin);font-size:clamp(34px,3.6vw,50px);font-weight:500;line-height:1;color:var(--gold)}
+.stat span{display:block;margin-top:8px;font-size:11.5px;letter-spacing:.22em;color:var(--muted)}
+
+/* ---------- footer ---------- */
+footer{position:relative;z-index:2;border-top:1px solid var(--line);background:var(--bg2);padding:64px clamp(20px,5vw,72px) 88px}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1.2fr;gap:clamp(28px,4vw,56px);max-width:1440px;margin:0 auto}
+.foot-brand h3{font-family:var(--serif);font-size:24px;letter-spacing:.22em;margin-bottom:10px}
+.foot-brand p{color:var(--muted);font-size:13px;max-width:26em;line-height:1.9}
+.foot-col h4{font-family:var(--latin);font-size:11px;letter-spacing:.3em;color:var(--gold);margin-bottom:16px;font-weight:500}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.foot-col a,.foot-col button{font-size:13.5px;color:var(--muted);letter-spacing:.08em;text-align:left;transition:color .3s}
+.foot-col a:hover,.foot-col button:hover{color:var(--gold)}
+.foot-credits{color:var(--muted);font-size:12.5px;line-height:2;letter-spacing:.02em;word-break:break-word}
+.foot-bottom{
+  max-width:1440px;margin:44px auto 0;padding-top:20px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;
+  color:var(--faint);font-size:11.5px;letter-spacing:.1em;
+}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:clamp(14px,4vw,48px)}
+.lb[hidden]{display:none}
+.lb-backdrop{position:absolute;inset:0;background:rgba(6,6,8,.95);backdrop-filter:blur(10px)}
+.lb-stage{
+  position:relative;z-index:2;width:100%;max-width:min(1080px,94vw);
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  opacity:0;transform:scale(.965);transition:opacity .35s var(--ease),transform .35s var(--ease);
+}
+.lb.open .lb-stage{opacity:1;transform:none}
+.lb-imgwrap{display:flex;max-width:100%;box-shadow:0 32px 90px rgba(0,0,0,.55)}
+.lb-imgwrap img{max-width:100%;max-height:min(74vh,760px);object-fit:contain;background:#111}
+.lb-meta{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.lb-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.lb-title{font-family:var(--serif);font-size:clamp(19px,2vw,24px);letter-spacing:.1em;color:#f5f2ec}
+.lb-count{font-family:var(--latin);font-size:13px;letter-spacing:.26em;color:var(--gold)}
+.lb-cap{color:rgba(236,232,225,.66);font-size:13.5px;max-width:46em;letter-spacing:.04em;line-height:1.9}
+.lb-credit{font-size:11px;letter-spacing:.2em;color:rgba(236,232,225,.4)}
+.lb-btn{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+  width:52px;height:52px;display:grid;place-items:center;
+  border:1px solid rgba(236,232,225,.22);background:rgba(12,12,14,.45);backdrop-filter:blur(6px);
+  font-family:var(--latin);font-size:26px;line-height:1;color:#ece8e1;
+  transition:border-color .3s,color .3s,background .3s;
+}
+.lb-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(12,12,14,.7)}
+.lb-prev{left:clamp(8px,2.4vw,26px)}
+.lb-next{right:clamp(8px,2.4vw,26px)}
+.lb-close{
+  position:absolute;top:18px;right:20px;z-index:3;
+  width:46px;height:46px;display:grid;place-items:center;
+  border:1px solid rgba(236,232,225,.22);color:#ece8e1;font-size:22px;line-height:1;
+  transition:border-color .3s,color .3s,transform .3s;
+}
+.lb-close:hover{border-color:var(--gold);color:var(--gold);transform:rotate(90deg)}
+.lb-thumbs{
+  position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:3;
+  display:flex;gap:8px;max-width:92vw;overflow-x:auto;padding:8px 4px;scrollbar-width:none;
+}
+.lb-thumbs::-webkit-scrollbar{display:none}
+.lb-thumb{width:50px;height:50px;flex:0 0 auto;overflow:hidden;border:1px solid transparent;opacity:.4;transition:opacity .3s,border-color .3s}
+.lb-thumb img{width:100%;height:100%;object-fit:cover}
+.lb-thumb.active{border-color:var(--gold);opacity:1}
+.lb-thumb:hover{opacity:.85}
+html.lb-open,html.lb-open body{overflow:hidden}
+
+/* ---------- tweaks ---------- */
+.tweaks{position:fixed;right:16px;bottom:16px;z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.tw-toggle{
+  display:inline-flex;align-items:center;gap:9px;
+  border:1px solid var(--line-strong);border-radius:999px;
+  background:var(--nav-bg);backdrop-filter:blur(12px);
+  padding:9px 16px;font-size:11px;letter-spacing:.24em;color:var(--muted);
+  transition:color .3s,border-color .3s;
+}
+.tw-toggle:hover{color:var(--gold);border-color:var(--gold)}
+.tw-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.tw-panel{
+  display:none;width:236px;padding:18px;
+  background:var(--surface);border:1px solid var(--line-strong);
+  box-shadow:0 20px 60px rgba(0,0,0,.38);
+}
+.tw-panel.show{display:block}
+.tw-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--muted);letter-spacing:.06em}
+.tw-row+.tw-row{margin-top:12px}
+.seg{display:flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden}
+.seg button{padding:5px 12px;font-size:11.5px;letter-spacing:.08em;color:var(--muted);transition:background .3s,color .3s}
+.seg button.on{background:var(--gold);color:#14100a}
+.tw-note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--faint);line-height:1.8}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .masonry{columns:2}
+  .series-grid{grid-template-columns:repeat(2,1fr)}
+  .about{grid-template-columns:1fr;gap:36px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  :root{--nav-h:64px}
+  .nav-links{display:none}
+  .nav-vol{display:none}
+  .filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto}
+  .hero-foot{flex-direction:column;align-items:flex-start;gap:12px}
+  .masonry{columns:2;column-gap:12px}
+  .g-item{margin-bottom:12px}
+  .series-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .sc-desc{display:none}
+  .sc-name{font-size:17px}
+  .lb-thumbs{display:none}
+  .lb-imgwrap img{max-height:62vh}
+  .lb-btn{width:44px;height:44px;font-size:22px}
+  .foot-grid{grid-template-columns:1fr}
+  .tw-panel{width:210px}
+}
+@media (max-width:360px){
+  .masonry{columns:1}
+  .series-grid{grid-template-columns:1fr}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+html.no-motion *,html.no-motion *::before,html.no-motion *::after{
+  animation:none!important;transition:none!important;
+}
+html.no-motion .reveal{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="progress"><i id="bar"></i></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="回到顶部">
+    <span class="brand-mark">光</span>
+    <span class="brand-text">
+      <span class="brand-name" id="brandName">光影志</span>
+      <span class="brand-en" id="brandEn">GLAMOUR GALLERY</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="主导航">
+    <a href="#series">系列</a>
+    <a href="#gallery">影集</a>
+    <a href="#about">关于</a>
+  </nav>
+  <span class="nav-vol" id="navVol">VOL.01 / 2026</span>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <p class="eyebrow">Glamour Collection — Vol.01</p>
+      <h1>光影<span class="hollow">之间</span></h1>
+      <p class="hero-sub" id="heroTagline">一场关于光与注视的暗房展览 —— 十二帧风格肖像，六组主题系列。</p>
+      <div class="hero-cta">
+        <a class="btn" href="#series">进入系列</a>
+        <a class="btn ghost" href="#gallery">浏览影集</a>
+      </div>
+    </div>
+    <div class="hero-foot">
+      <span class="scroll-hint"><i></i>向下滚动</span>
+      <span id="heroCredit"></span>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="mq-group"><span>光 <b>·</b> 影 <b>·</b> 眸 <b>·</b> 息 <b>·</b> 纹 <b>·</b> 色 <b>·</b></span><span>光 <b>·</b> 影 <b>·</b> 眸 <b>·</b> 息 <b>·</b> 纹 <b>·</b> 色 <b>·</b></span><span>光 <b>·</b> 影 <b>·</b> 眸 <b>·</b> 息 <b>·</b> 纹 <b>·</b> 色 <b>·</b></span></div>
+      <div class="mq-group"><span>光 <b>·</b> 影 <b>·</b> 眸 <b>·</b> 息 <b>·</b> 纹 <b>·</b> 色 <b>·</b></span><span>光 <b>·</b> 影 <b>·</b> 眸 <b>·</b> 息 <b>·</b> 纹 <b>·</b> 色 <b>·</b></span><span>光 <b>·</b> 影 <b>·</b> 眸 <b>·</b> 息 <b>·</b> 纹 <b>·</b> 色 <b>·</b></span></div>
+    </div>
+  </div>
+
+  <section class="section" id="series">
+    <div class="sec-head">
+      <div>
+        <p class="sec-index">01 — SERIES</p>
+        <h2>六组光线，六种叙事</h2>
+      </div>
+      <p class="sec-note">每一组系列由两帧画面构成。点击任意系列，可直接进入对应的影集。</p>
+    </div>
+    <div class="series-grid" id="seriesGrid"></div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="sec-head">
+      <div>
+        <p class="sec-index">02 — GALLERY</p>
+        <h2>全部影集</h2>
+      </div>
+      <p class="sec-note">点击任意一帧查看大图；灯箱内可用 ← → 切换，Esc 关闭。</p>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="masonry" id="galleryGrid"></div>
+  </section>
+
+  <section class="section about" id="about">
+    <div>
+      <p class="about-quote">镜头不追逐脸孔，<br>它收集光落在肩膀、<br>发梢与裙摆上的<em>方式</em>。</p>
+      <div class="stats">
+        <div class="stat"><b id="statPhotos">0</b><span>帧写真</span></div>
+        <div class="stat"><b id="statSeries">0</b><span>组系列</span></div>
+        <div class="stat"><b id="statCredits">0</b><span>位摄影</span></div>
+        <div class="stat"><b id="statVol">01</b><span>本辑 VOL.</span></div>
+      </div>
+    </div>
+    <div class="about-body">
+      <p>「光影志」是一次关于注视的练习。画面里的人不是被观看的对象，而是与光合作的人：她把重量交给影子，把轮廓交给逆光，把最后一帧交给快门。</p>
+      <p>本页是设计演示作品。所有照片存放于项目里的 photos 文件夹，页面启动时读取该文件夹的图片清单；增删照片后，双击根目录的「更新图库.bat」即可刷新列表，也可以直接编辑 gallery-data.js 自定义标题与文案。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <h3 id="footBrand">光影志</h3>
+      <p>一场关于光与注视的暗房展览。照片来自你的 photos 文件夹，标题与文案可自由编辑。</p>
+    </div>
+    <div class="foot-col">
+      <h4>NAVIGATION</h4>
+      <ul>
+        <li><a href="#top">回到顶部</a></li>
+        <li><a href="#series">系列</a></li>
+        <li><a href="#gallery">影集</a></li>
+        <li><a href="#about">关于</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>CREDITS</h4>
+      <p class="foot-credits" id="footCredits">本地图片</p>
+      <p class="foot-credits" style="margin-top:12px;color:var(--faint);font-size:11.5px">图片文件夹：photos/ · 更新列表：双击「更新图库.bat」</p>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 光影志 GLAMOUR GALLERY · 设计演示作品</span>
+    <span>示例照片来自 Pexels 免费图库（Pexels License）</span>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="图片查看器">
+  <div class="lb-backdrop" id="lbBackdrop"></div>
+  <div class="lb-stage" id="lbStage">
+    <div class="lb-imgwrap"><img id="lbImg" src="" alt=""></div>
+    <div class="lb-meta">
+      <div class="lb-top">
+        <span class="lb-count" id="lbCount">01 / 12</span>
+        <span class="lb-title" id="lbTitle"></span>
+      </div>
+      <p class="lb-cap" id="lbCap"></p>
+      <span class="lb-credit" id="lbCredit"></span>
+    </div>
+  </div>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="上一张">‹</button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="下一张">›</button>
+  <button class="lb-close" id="lbClose" aria-label="关闭">×</button>
+  <div class="lb-thumbs" id="lbThumbs"></div>
+</div>
+
+<aside class="tweaks">
+  <div class="tw-panel" id="twPanel">
+    <div class="tw-row">
+      <span>主题</span>
+      <div class="seg" id="segTheme">
+        <button type="button" data-theme-val="dark">暗色</button>
+        <button type="button" data-theme-val="light">亮色</button>
+      </div>
+    </div>
+    <div class="tw-row">
+      <span>动效</span>
+      <div class="seg" id="segMotion">
+        <button type="button" data-motion-val="on">开</button>
+        <button type="button" data-motion-val="off">关</button>
+      </div>
+    </div>
+    <p class="tw-note">微调面板 · 只影响当前浏览器</p>
+  </div>
+  <button class="tw-toggle" id="twToggle" aria-expanded="false">
+    <span class="tw-dot"></span>TWEAKS 微调
+  </button>
+</aside>
+
+<noscript><p style="padding:120px 24px;text-align:center;color:#a49e95">这个页面需要开启 JavaScript 才能浏览影集。</p></noscript>
+
+<!-- 内置示例数据：当 gallery-data.js 不存在时使用 -->
+<script>
+window.DEMO_DATA = {
+  "site": { "title": "光影志", "titleEn": "GLAMOUR GALLERY", "vol": "VOL.01", "year": "2026", "tagline": "一场关于光与注视的暗房展览 —— 十二帧风格肖像，六组主题系列。" },
+  "series": [
+    { "key": "s1", "name": "暗夜丝绒", "en": "DARK VELVET", "desc": "黑与光之间最短的距离。" },
+    { "key": "s2", "name": "都市霓虹", "en": "URBAN NEON", "desc": "把城市夜景借来，当一次自己的追光。" },
+    { "key": "s3", "name": "复古名伶", "en": "RETRO GLAMOUR", "desc": "旧时光的聚光灯，至今还亮着一盏。" },
+    { "key": "s4", "name": "纯白之息", "en": "WHITE BREATH", "desc": "白色不是空，是所有颜色的呼吸。" },
+    { "key": "s5", "name": "海屿微风", "en": "SEA BREEZE", "desc": "裙摆和浪，共用同一种节奏。" },
+    { "key": "s6", "name": "蔷薇迷雾", "en": "ROSE MIST", "desc": "粉色迷雾里，视线自动聚焦。" }
+  ],
+  "photos": [
+    { "file": "photos/img-01.jpg", "title": "丝绒步态", "num": "01", "series": "s1", "caption": "黑色蕾丝掠过石板路，高跟鞋把夜色敲出坐标。", "w": 1200, "h": 1500, "credit": "@alipazani" },
+    { "file": "photos/img-02.jpg", "title": "石柱与影", "num": "02", "series": "s1", "caption": "她靠在石柱上，影子比身体更先抵达。", "w": 1200, "h": 1800, "credit": "@lokmansevim" },
+    { "file": "photos/img-03.jpg", "title": "霓虹渡口", "num": "03", "series": "s2", "caption": "栏杆之外，整座城市都在失焦。", "w": 1200, "h": 1800, "credit": "@wolfart" },
+    { "file": "photos/img-04.jpg", "title": "夜航班", "num": "04", "series": "s2", "caption": "车流是地面上的银河，她只借一束光起飞。", "w": 1200, "h": 1800, "credit": "@gabriela-silva" },
+    { "file": "photos/img-05.jpg", "title": "波点与天空", "num": "05", "series": "s3", "caption": "波点裙里吹出来的，是五十年代的风。", "w": 1200, "h": 1800, "credit": "@serdargoksu" },
+    { "file": "photos/img-06.jpg", "title": "红唇信笺", "num": "06", "series": "s3", "caption": "黑蕾丝手套、红唇、一封没有寄出的信。", "w": 1200, "h": 1800, "credit": "@andreza-abras" },
+    { "file": "photos/img-07.jpg", "title": "蕾丝呼吸", "num": "07", "series": "s4", "caption": "白裙子的褶皱里，藏着上午十点的太阳。", "w": 1200, "h": 1798, "credit": "@leeloothefirst" },
+    { "file": "photos/img-08.jpg", "title": "花瓣协议", "num": "08", "series": "s4", "caption": "她蹲在花瓣中间，和春天签了一份停战协议。", "w": 1200, "h": 800, "credit": "@cottonbro" },
+    { "file": "photos/img-09.jpg", "title": "白沙信号", "num": "09", "series": "s5", "caption": "海风把裙摆吹成一面帆，白沙是它的码头。", "w": 1200, "h": 1800, "credit": "@quangvinh" },
+    { "file": "photos/img-10.jpg", "title": "礁石之上", "num": "10", "series": "s5", "caption": "礁石记住每一个踩过它的脚印，包括她的。", "w": 1200, "h": 1800, "credit": "@lucasdutra" },
+    { "file": "photos/img-11.jpg", "title": "粉调出击", "num": "11", "series": "s6", "caption": "粉色是她的保护色，也是她的进攻色。", "w": 1200, "h": 1800, "credit": "@cottonbro" },
+    { "file": "photos/img-12.jpg", "title": "粉墙练习", "num": "12", "series": "s6", "caption": "一面粉色的墙，足够排练一场顶级的告别。", "w": 1200, "h": 1804, "credit": "@shvets-production" }
+  ]
+};
+</script>
+<script src="gallery-data.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  var DATA = (window.GALLERY_READY && window.GALLERY_DATA) ? window.GALLERY_DATA : window.DEMO_DATA;
+  var SITE   = DATA.site || {};
+  var SERIES = DATA.series || [];
+  var PHOTOS = DATA.photos || [];
+
+  var $  = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var state = { filter: 'all' };
+
+  function pad(n){ return ('0' + n).slice(-2); }
+  function seriesObj(key){
+    for (var i = 0; i < SERIES.length; i++){ if (SERIES[i].key === key) return SERIES[i]; }
+    return null;
+  }
+  function seriesName(key){ var s = seriesObj(key); return s ? s.name : ''; }
+  function bySeries(key){ return PHOTOS.filter(function(p){ return p.series === key; }); }
+  function currentList(){
+    return state.filter === 'all' ? PHOTOS.slice() : PHOTOS.filter(function(p){ return p.series === state.filter; });
+  }
+  function scrollToEl(el, offset){
+    if (!el) return;
+    var top = el.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop) - (offset || 0);
+    window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  /* ---------- hero / brand ---------- */
+  function renderHero(){
+    $('#brandName').textContent = SITE.title || '光影志';
+    $('#brandEn').textContent   = SITE.titleEn || 'GLAMOUR GALLERY';
+    $('#footBrand').textContent = SITE.title || '光影志';
+    $('#navVol').textContent    = (SITE.vol || 'VOL.01') + ' / ' + (SITE.year || '2026');
+    $('#heroTagline').textContent = SITE.tagline || '一场关于光与注视的暗房展览。';
+    document.title = (SITE.title || '光影志') + ' · ' + (SITE.titleEn || 'Glamour Gallery') + ' — 写真集';
+
+    var hero = $('#top');
+    if (PHOTOS.length){
+      var bg = document.createElement('div');
+      bg.className = 'hero-bg';
+      var img = document.createElement('img');
+      img.src = PHOTOS[0].file;
+      img.alt = '';
+      img.addEventListener('error', function(){ bg.style.display = 'none'; });
+      bg.appendChild(img);
+      hero.insertBefore(bg, hero.firstChild);
+      var c = $('#heroCredit');
+      c.textContent = PHOTOS[0].credit ? '封面摄影 ' + PHOTOS[0].credit : '封面 · ' + PHOTOS[0].title;
+    }
+  }
+
+  /* ---------- series ---------- */
+  function renderSeries(){
+    var wrap = $('#seriesGrid');
+    wrap.innerHTML = '';
+    if (!PHOTOS.length){ $('#series').style.display = 'none'; return; }
+    SERIES.forEach(function(s){
+      var list = bySeries(s.key);
+      if (!list.length) return;
+      var card = document.createElement('article');
+      card.className = 'series-card reveal';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', '查看系列：' + s.name);
+
+      var img = document.createElement('img');
+      img.src = list[0].file;
+      img.alt = s.name;
+      img.loading = 'lazy';
+
+      var body = document.createElement('div');
+      body.className = 'sc-body';
+      var en = document.createElement('span'); en.className = 'sc-en'; en.textContent = s.en || '';
+      var name = document.createElement('h3'); name.className = 'sc-name'; name.textContent = s.name;
+      var desc = document.createElement('p'); desc.className = 'sc-desc'; desc.textContent = s.desc || '';
+      body.appendChild(en); body.appendChild(name); body.appendChild(desc);
+
+      var count = document.createElement('span');
+      count.className = 'sc-count';
+      count.textContent = pad(list.length);
+
+      card.appendChild(img); card.appendChild(body); card.appendChild(count);
+
+      function go(){
+        state.filter = s.key;
+        renderFilters(); renderGallery();
+        scrollToEl($('#gallery'), 0);
+      }
+      card.addEventListener('click', go);
+      card.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); }
+      });
+      wrap.appendChild(card);
+    });
+    observeReveals();
+  }
+
+  /* ---------- filters ---------- */
+  function renderFilters(){
+    var wrap = $('#filters');
+    wrap.innerHTML = '';
+    var items = [{ key: 'all', name: '全部', n: PHOTOS.length }];
+    SERIES.forEach(function(s){
+      var n = bySeries(s.key).length;
+      if (n) items.push({ key: s.key, name: s.name, n: n });
+    });
+    items.forEach(function(it){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip' + (state.filter === it.key ? ' active' : '');
+      var t = document.createElement('span'); t.textContent = it.name;
+      var c = document.createElement('small'); c.textContent = pad(it.n);
+      b.appendChild(t); b.appendChild(c);
+      b.addEventListener('click', function(){
+        state.filter = it.key;
+        renderFilters(); renderGallery();
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  /* ---------- gallery ---------- */
+  function emptyState(){
+    var d = document.createElement('div');
+    d.className = 'empty';
+    var h = document.createElement('h3'); h.textContent = '照片文件夹还是空的';
+    var p = document.createElement('p');
+    p.textContent = '把照片放进项目里的 photos 文件夹，双击根目录的「更新图库.bat」，然后刷新本页。';
+    var ol = document.createElement('ol');
+    ['把照片复制进 photos 文件夹（jpg / png / webp 都可以）',
+     '回到项目根目录，双击「更新图库.bat」',
+     '刷新这个页面，照片就出现在这里了'].forEach(function(t){
+      var li = document.createElement('li'); li.textContent = t; ol.appendChild(li);
+    });
+    d.appendChild(h); d.appendChild(p); d.appendChild(ol);
+    return d;
+  }
+
+  function renderGallery(){
+    var wrap = $('#galleryGrid');
+    wrap.innerHTML = '';
+    var list = currentList();
+
+    if (!list.length){
+      wrap.classList.remove('masonry');
+      wrap.appendChild(emptyState());
+      return;
+    }
+    wrap.classList.add('masonry');
+
+    list.forEach(function(p, idx){
+      var fig = document.createElement('figure');
+      fig.className = 'g-item reveal';
+      fig.tabIndex = 0;
+      fig.setAttribute('role', 'button');
+      fig.setAttribute('aria-label', '查看大图：' + (p.title || ''));
+      if (p.w && p.h) fig.style.aspectRatio = p.w + ' / ' + p.h;
+
+      var img = document.createElement('img');
+      img.src = p.file;
+      img.alt = p.title || '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.addEventListener('load', function(){ img.classList.add('loaded'); });
+      img.addEventListener('error', function(){ fig.classList.add('missing'); });
+      if (img.complete && img.naturalWidth) img.classList.add('loaded');
+
+      var num = document.createElement('span');
+      num.className = 'g-num';
+      num.textContent = p.num || pad(idx + 1);
+
+      var cap = document.createElement('figcaption');
+      cap.className = 'g-cap';
+      var tt = document.createElement('span'); tt.className = 'g-title'; tt.textContent = p.title || '';
+      var ss = document.createElement('span'); ss.className = 'g-series'; ss.textContent = seriesName(p.series);
+      cap.appendChild(tt); cap.appendChild(ss);
+
+      fig.appendChild(img); fig.appendChild(num); fig.appendChild(cap);
+
+      fig.addEventListener('click', function(){ openLB(list, idx); });
+      fig.addEventListener('keydown', function(e){
+        if (e.key === 'Enter'){ openLB(list, idx); }
+      });
+      wrap.appendChild(fig);
+    });
+    observeReveals();
+  }
+
+  /* ---------- about / credits ---------- */
+  function renderAbout(){
+    var creditSet = {};
+    PHOTOS.forEach(function(p){ if (p.credit) creditSet[p.credit] = 1; });
+    var credits = Object.keys(creditSet);
+
+    $('#statPhotos').textContent  = PHOTOS.length;
+    $('#statSeries').textContent  = SERIES.filter(function(s){ return bySeries(s.key).length; }).length;
+    $('#statCredits').textContent = credits.length;
+    $('#statVol').textContent     = '01';
+    $('#footCredits').textContent = credits.length ? credits.join(' · ') : '本地图片（未标注摄影）';
+  }
+
+  /* ---------- lightbox ---------- */
+  var lbEl = $('#lb');
+  var LB = { list: [], idx: 0 };
+
+  function paintLB(){
+    var p = LB.list[LB.idx];
+    if (!p) return;
+    var im = $('#lbImg');
+    im.src = p.file;
+    im.alt = p.title || '';
+    $('#lbTitle').textContent  = p.title || '';
+    $('#lbCap').textContent    = p.caption || '';
+    $('#lbCount').textContent  = pad(LB.idx + 1) + ' / ' + pad(LB.list.length);
+    $('#lbCredit').textContent = p.credit ? '摄影 ' + p.credit : '';
+
+    var thumbs = $$('.lb-thumb');
+    thumbs.forEach(function(t, i){ t.classList.toggle('active', i === LB.idx); });
+    var active = thumbs[LB.idx];
+    var box = $('#lbThumbs');
+    if (active && box){
+      box.scrollLeft = active.offsetLeft - box.clientWidth / 2 + active.clientWidth / 2;
+    }
+  }
+
+  function renderThumbs(){
+    var box = $('#lbThumbs');
+    box.innerHTML = '';
+    LB.list.forEach(function(p, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'lb-thumb' + (i === LB.idx ? ' active' : '');
+      b.setAttribute('aria-label', '查看第 ' + (i + 1) + ' 张');
+      var im = document.createElement('img');
+      im.src = p.file;
+      im.alt = '';
+      im.loading = 'lazy';
+      b.appendChild(im);
+      b.addEventListener('click', function(){ LB.idx = i; paintLB(); });
+      box.appendChild(b);
+    });
+  }
+
+  function openLB(list, idx){
+    LB.list = list;
+    LB.idx = idx;
+    renderThumbs();
+    paintLB();
+    lbEl.hidden = false;
+    requestAnimationFrame(function(){ lbEl.classList.add('open'); });
+    document.documentElement.classList.add('lb-open');
+  }
+  function closeLB(){
+    lbEl.classList.remove('open');
+    document.documentElement.classList.remove('lb-open');
+    setTimeout(function(){ lbEl.hidden = true; }, 340);
+  }
+  function stepLB(d){
+    if (!LB.list.length) return;
+    LB.idx = (LB.idx + d + LB.list.length) % LB.list.length;
+    paintLB();
+  }
+
+  $('#lbClose').addEventListener('click', closeLB);
+  $('#lbBackdrop').addEventListener('click', closeLB);
+  $('#lbPrev').addEventListener('click', function(){ stepLB(-1); });
+  $('#lbNext').addEventListener('click', function(){ stepLB(1); });
+  document.addEventListener('keydown', function(e){
+    if (lbEl.hidden) return;
+    if (e.key === 'Escape') closeLB();
+    else if (e.key === 'ArrowLeft') stepLB(-1);
+    else if (e.key === 'ArrowRight') stepLB(1);
+  });
+
+  var touchX = null;
+  $('#lbStage').addEventListener('touchstart', function(e){ touchX = e.touches[0].clientX; }, { passive: true });
+  $('#lbStage').addEventListener('touchend', function(e){
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 45) stepLB(dx > 0 ? -1 : 1);
+  }, { passive: true });
+
+  /* ---------- scroll: nav + progress ---------- */
+  var nav = $('#nav'), bar = $('#bar');
+  function onScroll(){
+    var y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle('scrolled', y > 30);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(y / h, 1) : 0) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- reveal ---------- */
+  var io = null;
+  if ('IntersectionObserver' in window){
+    io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+  }
+  function observeReveals(){
+    var els = $$('.reveal:not(.in)');
+    if (!io){ els.forEach(function(e){ e.classList.add('in'); }); return; }
+    els.forEach(function(e){ io.observe(e); });
+  }
+
+  /* ---------- tweaks ---------- */
+  var root = document.documentElement;
+  var themeSeg = $('#segTheme'), motionSeg = $('#segMotion');
+  var panel = $('#twPanel'), twBtn = $('#twToggle');
+
+  function syncTweaks(){
+    var t = root.getAttribute('data-theme') || 'dark';
+    $$('button', themeSeg).forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-theme-val') === t); });
+    var motionOn = !root.classList.contains('no-motion');
+    $$('button', motionSeg).forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-motion-val') === (motionOn ? 'on' : 'off'));
+    });
+  }
+  function setTheme(t){
+    root.setAttribute('data-theme', t);
+    try { localStorage.setItem('gg-theme', t); } catch(e){}
+    syncTweaks();
+  }
+  function setMotion(on){
+    root.classList.toggle('no-motion', !on);
+    try { localStorage.setItem('gg-motion', on ? '1' : '0'); } catch(e){}
+    syncTweaks();
+  }
+
+  $$('button', themeSeg).forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme-val')); });
+  });
+  $$('button', motionSeg).forEach(function(b){
+    b.addEventListener('click', function(){ setMotion(b.getAttribute('data-motion-val') === 'on'); });
+  });
+  twBtn.addEventListener('click', function(){
+    var open = panel.classList.toggle('show');
+    twBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  try {
+    var savedTheme = localStorage.getItem('gg-theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') root.setAttribute('data-theme', savedTheme);
+    if (localStorage.getItem('gg-motion') === '0') root.classList.add('no-motion');
+  } catch(e){}
+
+  /* ---------- init ---------- */
+  renderHero();
+  renderSeries();
+  renderFilters();
+  renderGallery();
+  renderAbout();
+  syncTweaks();
+  observeReveals();
+})();
+</script>
+</body>
+</html>

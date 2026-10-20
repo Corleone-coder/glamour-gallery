@@ -1,0 +1,14 @@
+# 系统文件
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 临时文件
+_*.png
+_*.jpg
+_*.js
